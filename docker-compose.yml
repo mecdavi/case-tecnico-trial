@@ -1,0 +1,46 @@
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: ./trial-app
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+    networks:
+      - trial-network
+
+  server:
+    build:
+      context: ./trial-server
+      dockerfile: Dockerfile
+    ports:
+      - "3333:3333"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - postgres
+    networks:
+      - trial-network
+
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: web_admin
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: trial_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - trial-network
+
+volumes:
+  pgdata:
+
+networks:
+  trial-network:
+    driver: bridge
