@@ -21,6 +21,7 @@
 	</q-layout>	
 </template>
 <script type="text/javascript">
+import { useAppStore } from 'src/stores/dados'
 	export default {
 		name: 'PageIndex',
 		data() {
@@ -35,12 +36,17 @@
 		methods: {
 			async login() {
 				this.$q.loading.show()
-				await this.$store.dispatch('limparStore')
-				var response = await this.executeMethod('post','auth/login',Object.assign(this.form, {sistema: 'ADM'}))
+				const appStore = useAppStore()
+				await appStore.limparStore()
+				var response = await this.executeMethod('post','api/v1/login',this.form)
 				if (response.status===200) {
-					this.$store.commit('setDados',{key:'login',value:response.data.login})
-					this.$store.commit('setDados',{key:'usuario',value:response.data.usuario})
+					console.log('response login',response)
+					await appStore.setDados({key:'login',value:response.data.usuario.email_verified_at})
+					await appStore.setDados({key:'usuario',value:response.data.usuario})
+					await appStore.setDados({key:'token',value:response.data.token})
 					this.$router.push('/')
+				}else{
+					this.mostrarNotificacao({message:'Usuário não cadastrado',type:'negative'})
 				}
 				this.$q.loading.hide()
 			},

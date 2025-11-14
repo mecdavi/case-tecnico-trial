@@ -27,6 +27,7 @@
 </template>
 <script lang="js">
 import EssentialLink from 'components/EssentialLink.vue'
+import { useAppStore } from 'src/stores/dados'
 export default{
     name:'principal-layout',
     components:{
@@ -61,6 +62,13 @@ export default{
         toggleLeftDrawer() {
           this.leftDrawerOpen = !this.leftDrawerOpen
         }
+    },
+    async created(){
+       const appStore = useAppStore()
+      if (!appStore.getUsuario || Object.keys(appStore.getUsuario).length === 0) {
+        return this.$router.push('/login')
+      }
+
     }
 }
 </script>
