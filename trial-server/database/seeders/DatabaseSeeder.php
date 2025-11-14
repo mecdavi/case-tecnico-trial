@@ -2,21 +2,38 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Enums\UserRoleEnum;
+use App\Models\User;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        $user1 = User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'admin@teste.com',
+            'password' => bcrypt('123456')
+        ]);
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $user2 = User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'userAdmin@example.com',
+            'password' => bcrypt('neneVasco123'),
+        ]);
+
+        $user3 = User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'userClient@example.com',
+            'password' => bcrypt('neneVasco123'),
+        ]);
+
+        // roda só uma vez
+        $this->call(UserRoleSeeder::class);
+
+        // agora sim: usando ->value
+        $user1->assignRole(UserRoleEnum::ADMIN->value);
+        $user2->assignRole(UserRoleEnum::ADMIN->value);
+        $user3->assignRole(UserRoleEnum::USER->value);
     }
 }
