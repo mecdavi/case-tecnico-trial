@@ -3,23 +3,25 @@ version: '3.9'
 services:
   app:
     build:
-      context: ./trial-app
-      dockerfile: Dockerfile
+      #context: ./trial-app
+      context: .
+      dockerfile: trial-app/Dockerfile
     ports:
-      - "8080:8080"
-    volumes:
-      - .:/app
+      - "9000:9000"
+    # volumes:
+      # - .:/app
     networks:
       - trial-network
 
   server:
     build:
-      context: ./trial-server
-      dockerfile: Dockerfile
+      #context: ./trial-server
+      context: .
+      dockerfile: trial-server/Dockerfile
     ports:
       - "3333:3333"
-    volumes:
-      - .:/var/www/html
+    # volumes:
+      # - .:/var/www/html
     depends_on:
       - postgres
     networks:
