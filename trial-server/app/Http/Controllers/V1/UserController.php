@@ -76,9 +76,6 @@ class UserController extends Controller
     {
 
         $user = $this->userService->createUser($request->validated());
-        // dd($request);
-
-
         return new UserResource($user);
     }
 

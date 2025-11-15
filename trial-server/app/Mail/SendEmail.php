@@ -28,7 +28,7 @@ class RecuperarSenhaMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Recuperação de senha - Trial Server',
+            subject: 'bem vindo - Trial Server',
         );
     }
 
