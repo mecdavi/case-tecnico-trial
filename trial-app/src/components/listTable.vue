@@ -1,7 +1,6 @@
 <template>
-  <q-page>
     <div class="row col-12 flex justify-center q-pt-md">
-        <div class="text-h5 flex justify-center col-12 row q-py-lg"> Listagem de usuários</div>
+        <div class="text-h5 flex justify-center col-12 row q-py-lg"> {{title}}</div>
         <div class="col-8">
             <div>
                 <q-btn class="q-my-md" color="primary" outline label="Adicionar" @click="$router.push('users/edit')" />
@@ -28,55 +27,46 @@
             </q-table>
         </div>
     </div>
-  </q-page>
 </template>
-
 <script>
+import UserModal from 'components/modals/UserModal.vue';
 export default {
-  name: "indexUsers",
-  data() {
-    return {
-      data: [],
-      columns: [
-        { name: 'actions', label: 'Ações', field: 'actions', align: 'left' },
-        { name: 'email', label: 'Email', field: 'email', align: 'left' },
-        { name: 'name', label: 'Nome', field: 'name', align: 'left' },
-        { name: 'created_at', label: 'Criado em ', field: 'created_at', sortable: true, align: 'left',sort: (a, b) => a > b ? -1 : 1},
-        { name: 'updated_at', label: 'Atualizado em ', field: 'updated_at', align: 'left' },
-    ]
-    }
+  name: 'ListTable',
+  props: {
+    data: { type: Array, required: true, default: () => [] },
+    columns: { type: Array, required: true, default: () => [] },
+    title: { type: String, required: false, default: '' },
   },
-  methods:{
-    async buscar(){
-        await this.executeMethod('get', 'api/v1/users').then(response => {
-            if(response && response.status === 200){
-                this.data = response.data.data
-            }
+  methods: {
+    save(id) {
+        this.$q.dialog({
+          component: UserModal,
+          parent: this, dadosModal: { id: id },
+        }).onOk((res) => {
+          this.gravarProduto(res)
         })
+
+        console.log('save item')
     },
-    async deleteItem(id) {
+   async deleteItem(id) {
         this.$q.dialog({title:'Atenção!',message:'Você tem certeza que deseja proseguir?',
             cancel:'Não',
             style:{'z-index':'100'}, 
             persistent:false,
-            ok:'Sim',}).onOk(async() => {
-                let response = await this.executeMethod('delete', 'api/v1/users/'+id)
-                console.log(response)
-                if(response && response.status === 200){
+            ok:'Sim',}).onOk(() => {
+                let response = this.executeMethod('delete', 'api/v1/users/'+id)
+                if(response && response.status === 201){
                     this.mostrarNotificacao({
                         color: 'positive',
-                        message: response.data.message
+                        message: 'Item deletado com sucesso!'
                     })
-                    await this.buscar()
-                    return
                 }
             }).onCancel(() => {
                 return false
             })
     }
   },
-    async created () {
-        await this.buscar()
-    }
+  mounted() {
+  }
 }
 </script>

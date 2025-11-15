@@ -1,22 +1,18 @@
 import { boot } from 'quasar/wrappers'
+import { useAppStore } from 'src/stores/dados'
 
-export default boot(({ app }) => {
+export default boot(({ app,router }) => {
   app.config.globalProperties.executeMethod = async function (method, url, data,sair) {
     try {
         let response
         let errorMsg = ''
+        const appStore = useAppStore()
         try {
-            let cliente_id
-            // let baseURL = process.env.API_URL
-            // url = baseURL+url
-            console.log('URL:',url)
-            if (this.getCliente_id) url = url+'?cliente_id='+this.getCliente_id.toString()
-            if (this.getLogin && this.getLogin.token && !this.$api.defaults.headers.common['Authorization'])
-                this.$api.defaults.headers.common['Authorization'] = this.getLogin.type+' '+this.getLogin.token
-            if (method==='post') response = await this.$api.post(url,data || {cliente_id})
+            if (appStore.getToken && !this.$api.defaults.headers.common['Authorization'])
+                this.$api.defaults.headers.common['Authorization'] = 'Bearer '+ appStore.getToken
+            if (method==='post') response = await this.$api.post(url,data)
             else if (method==='get') {
-                response = await this.$api.get(url,data || {cliente_id})
-
+                response = await this.$api.get(url,data)
             }
             else if (method==='get-pdf') response = await this.$api.get(url,data ||  {responseType: 'arraybuffer'})
             else if (method==='put') response = await this.$api.put(url,data || {})
@@ -49,7 +45,7 @@ export default boot(({ app }) => {
                         errorMsg += (response.data.error.name ? 'name: '+response.data.error.name+'<br>' : '')+(response.data.error.e ? response.data.error.e+'<br>' : '')+'message: '+(response.data.error.message || '')
                         if (response.data.error.name==='InvalidJwtToken')
                             if (sair===true || sair===undefined)
-                                this.efetuarLogout()
+                                this.$logout()
                     }
                 }
             }
@@ -81,6 +77,44 @@ export default boot(({ app }) => {
         })
 
     } catch (err) {
+      console.error(err)
+      throw err
+    }
+  },
+   app.config.globalProperties.$logout = async function () {
+    try {
+        const appStore = useAppStore()
+        await appStore.limparStore()
+        router.push('/login')
+    } catch (err) {
+      console.error(err)
+      throw err
+    }
+  },
+   app.config.globalProperties.validacaoMensagem = async function () {
+    try {
+        this.$q.dialog({title:'Atenção!',message:'Você tem certeza que deseja proseguir?',
+            cancel:'Não',
+            style:{'z-index':'100'}, 
+            persistent:false,
+            ok:'Sim',}).onOk(() => {
+                return true
+            }).onCancel(() => {
+                return false
+            })
+    } catch (err) {
+      console.error(err)
+      throw err
+    }
+  },
+   app.config.globalProperties.rolesOptions = function () {
+    try {
+        let roles = [
+            {label:'Administrador', value:'Admin'},
+            {label:'Usuário', value:'User'}
+        ]
+        return roles
+    }catch (err){
       console.error(err)
       throw err
     }
