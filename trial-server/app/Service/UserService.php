@@ -19,7 +19,7 @@ class UserService
                     return $user;
                     break;
 
-                case 'Cliente':
+                case 'User':
                     DB::beginTransaction();
                     
                     $user = User::query()->create([
@@ -67,31 +67,15 @@ class UserService
 
                         $user->client_id = null;
                         $user->update();
-
-                        $client = Client::query()->where('id', $clientId)->first();
-                        if($client) {
-                            $client->addresses()->delete();
-                            $client->forceDelete();
-                        }
                     }
 
                     $user->assignRole(UserRoleEnum::ADMIN);
                     break;
 
-                case 'Cliente':
-                    if(isset($user->client_id) && $user->client_id) {
-                        $client = Client::query()->where('id', $user->client_id)->first();
-
-                    } else {
-                        $client = Client::query()->create($data);
-                    }
-
-                    $user->client_id = $client->id;
+                case 'User':
                     $user->update();
-
                     $user->assignRole(UserRoleEnum::USER);
                     break;
-
                 default:
                     throw new \Exception("Nenhuma permissão encontrada!", 422);
                     break;

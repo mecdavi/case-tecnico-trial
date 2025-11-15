@@ -17,14 +17,14 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $user2 = User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'userAdmin@example.com',
+            'name' => 'Test User A',
+            'email' => 'userA@example.com',
             'password' => bcrypt('neneVasco123'),
         ]);
 
         $user3 = User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'userClient@example.com',
+            'name' => 'Test User B',
+            'email' => 'userB@example.com',
             'password' => bcrypt('neneVasco123'),
         ]);
 
@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
 
         // agora sim: usando ->value
         $user1->assignRole(UserRoleEnum::ADMIN->value);
-        $user2->assignRole(UserRoleEnum::ADMIN->value);
+        $user2->assignRole(UserRoleEnum::USER->value);
         $user3->assignRole(UserRoleEnum::USER->value);
     }
 }
