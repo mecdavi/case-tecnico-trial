@@ -80,6 +80,7 @@ export default{
     },
     async created(){
       this.appStore = useAppStore()
+      console.log(this.appStore)
       if (!this.appStore.getUsuario || Object.keys(this.appStore.getUsuario).length === 0) {
         return this.$logout()
       }

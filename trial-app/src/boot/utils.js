@@ -84,7 +84,7 @@ export default boot(({ app,router }) => {
    app.config.globalProperties.$logout = async function () {
     try {
         const appStore = useAppStore()
-        await appStore.limparStore()
+        appStore.limparStore()
         router.push('/login')
     } catch (err) {
       console.error(err)

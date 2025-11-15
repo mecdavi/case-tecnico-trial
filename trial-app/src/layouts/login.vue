@@ -37,12 +37,11 @@ import { useAppStore } from 'src/stores/dados'
 			async login() {
 				this.$q.loading.show()
 				const appStore = useAppStore()
-				await appStore.limparStore()
 				var response = await this.executeMethod('post','api/v1/login',this.form)
 				if (response.status===200) {
-					await appStore.setDados({key:'login',value:response.data.usuario.email_verified_at})
 					await appStore.setDados({key:'usuario',value:response.data.usuario})
 					await appStore.setDados({key:'token',value:response.data.token})
+					await appStore.setDados({key:'role',value:response.data.usuario.role})
 					this.$router.push('/')
 				}else{
 					this.mostrarNotificacao({message:'Usuário não cadastrado',type:'negative'})
