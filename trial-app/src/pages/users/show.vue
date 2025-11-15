@@ -3,7 +3,7 @@
     <q-card class="col-10 q-my-md">
         <q-card-actions>
             <q-btn flat label="Voltar"  class="q-mr-md" icon="arrow_back" color="negative" @click="$router.push('/users')" outlined />
-            <q-btn v-show="!$route.meta.fdisable" label="Gravar" class="q-ma-md" icon="save" color="primary" outlined  @click="save()"/>
+            <q-btn v-show="!$route.meta.fdisable && getters.role != 'User'" label="Gravar" class="q-ma-md" icon="save" color="primary" outlined  @click="save()"/>
         </q-card-actions>
         <q-card-section>
             <div class="text-h6">Detalhes do Usuário</div>
@@ -50,11 +50,13 @@
 </template>
 
 <script>
+import { useAppStore } from 'src/stores/dados'
 export default {
   name: "indexUsers",
   data() {
     return {
       isPwd:true,
+      getters: useAppStore(),
       isPwd_confirmation:true,
       data: 
         {
@@ -69,8 +71,12 @@ export default {
   },
   methods:{
     async save(){
-        let response = await this.executeMethod('post','api/v1/users',this.data)
-        if(response.status == 201){
+        let response
+        if(this.data.id)
+            response = await this.executeMethod('put','api/v1/users/'+this.data.id,this.data)
+        else
+            response = await this.executeMethod('post','api/v1/users',this.data)
+        if([200,201].indexOf(response.status) != -1){
             this.mostrarNotificacao({color: 'positive',message: 'usuário gravado com sucesso!'})
             this.$router.push('/users/show/'+response.data.data.id)
             return  

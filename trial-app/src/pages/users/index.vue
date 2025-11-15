@@ -3,9 +3,7 @@
     <div class="row col-12 flex justify-center q-pt-md">
         <div class="text-h5 flex justify-center col-12 row q-py-lg"> Listagem de usuários</div>
         <div class="col-8">
-            <div>
-                <q-btn class="q-my-md" color="primary" outline label="Adicionar" @click="$router.push('users/edit')" />
-            </div>
+            <q-btn v-show="getters.getRole != 'User'" class="q-my-md" color="primary" outline label="Adicionar" @click="$router.push('users/edit')" />
             <q-table 
                 :rows="data"
                 class="my-sticky-dynamic"
@@ -20,8 +18,8 @@
                 <template v-slot:body-cell-actions="props">
                     <q-td align="left">
                         <q-btn flat round icon="remove_red_eye" color="primary" @click="$router.push('users/show/' + props.row.id)" />
-                        <q-btn flat round icon="edit" color="positive" @click="$router.push('users/edit/' + props.row.id)" />
-                        <q-btn flat round icon="delete" color="negative" @click="deleteItem(props.row.id)" />
+                        <q-btn v-show="getters.getRole != 'User'" flat round icon="edit" color="positive" @click="$router.push('users/edit/' + props.row.id)" />
+                        <q-btn v-show="getters.getRole != 'User'" flat round icon="delete" color="negative" @click="deleteItem(props.row.id)" />
                     </q-td>
 
                 </template>
@@ -32,11 +30,13 @@
 </template>
 
 <script>
+import { useAppStore } from 'src/stores/dados'
 export default {
   name: "indexUsers",
   data() {
     return {
       data: [],
+      getters: useAppStore(),
       columns: [
         { name: 'actions', label: 'Ações', field: 'actions', align: 'left' },
         { name: 'email', label: 'Email', field: 'email', align: 'left' },

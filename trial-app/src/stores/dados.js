@@ -1,20 +1,18 @@
 import { defineStore } from 'pinia'
 
-export const useAppStore = defineStore('app', {
+export const useAppStore = defineStore('trial', {
   state: () => ({
     login: {},
     usuario: {},
     token : '',
-    dadosEmpresa: {},
-    permissaoUsuario: null
+    role : '',
   }),
 
   getters: {
     getLogin: (state) => state.login,
     getUsuario: (state) => state.usuario,
     getToken: (state) => state.token,
-    getDadosEmpresa: (state) => state.dadosEmpresa,
-    getPermissaoUsuario: (state) => state.permissaoUsuario,
+    getRole: (state) => state.role,
   },
 
   actions: {
@@ -22,8 +20,8 @@ export const useAppStore = defineStore('app', {
       this.login = {}
       this.usuario = {}
       this.token = ''
-      this.orderDados = {}
-      this.permissaoUsuario = null
+      this.role = ''
+      localStorage.removeItem('pinia-trial')
     },
 
     limparUsuario() {
@@ -37,7 +35,9 @@ export const useAppStore = defineStore('app', {
     setUsuario(valor) {
       if (valor) this.usuario = valor
     },
-
   },
-  persist: true
+  persist: {
+    paths: ['token', 'usuario'] // apenas o necessário
+  }
+
 })
