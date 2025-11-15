@@ -12,6 +12,7 @@ export const useAppStore = defineStore('app', {
   getters: {
     getLogin: (state) => state.login,
     getUsuario: (state) => state.usuario,
+    getToken: (state) => state.token,
     getDadosEmpresa: (state) => state.dadosEmpresa,
     getPermissaoUsuario: (state) => state.permissaoUsuario,
   },
@@ -37,5 +38,6 @@ export const useAppStore = defineStore('app', {
       if (valor) this.usuario = valor
     },
 
-  }
+  },
+  persist: true
 })

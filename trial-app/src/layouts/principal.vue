@@ -3,8 +3,28 @@
     <q-header elevated>
       <q-toolbar class="bg-secondary">
         <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
-
         <q-toolbar-title> Trial App </q-toolbar-title>
+        <!-- User Menu -->
+          <span class="q-px-md text-bold">{{appStore.usuario.email}}</span>
+          <q-avatar size="32" color="primary">
+            <q-img fit="cover" src="/src/assets/cat_2.png" ></q-img>
+          </q-avatar>
+          <q-btn-dropdown class="gt-xs pc" stretch flat icon="settings">
+					<q-list dense class="bg-secondary text-white">
+						<q-list class="q-pl-xs">
+							<q-item>
+								<q-item-section>
+									<q-item-label>Configurações</q-item-label>
+								</q-item-section>
+							</q-item>
+							<q-item clickable @click="$logout()">
+								<q-item-section>
+									<q-item-label>Logout</q-item-label>
+								</q-item-section>
+							</q-item>
+						</q-list>
+          </q-list>
+          </q-btn-dropdown>
       </q-toolbar>
     </q-header>
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered dark>
@@ -37,25 +57,20 @@ export default{
         return{
             linksList : [
                 {
-                    title: 'Home',
-                    caption: '',
-                    icon: 'home',
-                    link: '/',
-                },
-                {
                     title: 'Dashboard',
                     caption: 'Dashboard users',
                     icon: 'dashboard',
-                    link: 'dashboard',
+                    link: '/',
                 },
                 {
                     title: 'Usuários',
                     caption: 'Crie ou gerencie usuários',
                     icon: 'person',
-                    link: 'users',
+                    link: '/users',
                 },
             ],
-            leftDrawerOpen:false
+            leftDrawerOpen:false,
+            appStore:'' ,
         }
     },
     methods:{
@@ -64,9 +79,9 @@ export default{
         }
     },
     async created(){
-       const appStore = useAppStore()
-      if (!appStore.getUsuario || Object.keys(appStore.getUsuario).length === 0) {
-        return this.$router.push('/login')
+      this.appStore = useAppStore()
+      if (!this.appStore.getUsuario || Object.keys(this.appStore.getUsuario).length === 0) {
+        return this.$logout()
       }
 
     }

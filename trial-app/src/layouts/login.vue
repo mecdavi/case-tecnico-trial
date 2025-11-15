@@ -40,7 +40,6 @@ import { useAppStore } from 'src/stores/dados'
 				await appStore.limparStore()
 				var response = await this.executeMethod('post','api/v1/login',this.form)
 				if (response.status===200) {
-					console.log('response login',response)
 					await appStore.setDados({key:'login',value:response.data.usuario.email_verified_at})
 					await appStore.setDados({key:'usuario',value:response.data.usuario})
 					await appStore.setDados({key:'token',value:response.data.token})
