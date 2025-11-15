@@ -97,27 +97,9 @@ class UserController extends Controller
      */
     public function update(UserUpdateRequest $request, string $id): UserResource
     {
+        // dd($request);
         $user = User::query()->findOrFail($id);
-
-        $email = User::query()->where('email', $request->email)->whereNotIn('id', [$id])->first();
-        if($email) {
-            throw new \Exception("Email já está sendo usado por outro usuário", 422);
-        }
-
-        if($request->filled('cnpj')) {
-            $query = Client::query();
-    
-            if(isset($user->client_id) && $user->client_id)
-                $query->whereNotIn('id', [$user->client_id]);
-    
-            $cliente = $query->where('cnpj', $request->cnpj)->first();
-            if($cliente) {
-                throw new \Exception("CNPJ já está sendo utilizado por outro cliente", 422);
-            }
-        }
-
         $user = $this->userService->updateUser($request->validated(), $user->id);
-
         return new UserResource($user);
     }
 
