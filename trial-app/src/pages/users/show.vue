@@ -71,8 +71,12 @@ export default {
   },
   methods:{
     async save(){
-        let response = await this.executeMethod(this.data.id ?'put':'post','api/v1/users',this.data)
-        if(response.status == 201){
+        let response
+        if(this.data.id)
+            response = await this.executeMethod('put','api/v1/users/'+this.data.id,this.data)
+        else
+            response = await this.executeMethod('post','api/v1/users',this.data)
+        if([200,201].indexOf(response.status) != -1){
             this.mostrarNotificacao({color: 'positive',message: 'usuário gravado com sucesso!'})
             this.$router.push('/users/show/'+response.data.data.id)
             return  
