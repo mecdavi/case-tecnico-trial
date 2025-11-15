@@ -17,6 +17,6 @@ Route::prefix('v1')
     Route::middleware(['auth:sanctum','role:Admin'])->group(function () {
             Route::delete('/users/{id}',[\App\Http\Controllers\V1\UserController::class,'destroy']);
             Route::post('/users',[\App\Http\Controllers\V1\UserController::class,'store']);
-            Route::put('/users',[\App\Http\Controllers\V1\UserController::class,'update']);
+            Route::put('/users/{id}',[\App\Http\Controllers\V1\UserController::class,'update']);
     });
 });

@@ -39,7 +39,7 @@ class AuthController extends Controller
             return response()->json([
                 'token' => $authToken["token"],
                 'token_type' => 'Bearer',
-                'usuario' => $authToken["user"],
+                'usuario' => new UserResource($authToken["user"]),
             ]);
         }catch ( InvalidCredentialsException $exception){
             return response()->json([

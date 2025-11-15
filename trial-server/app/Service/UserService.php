@@ -62,13 +62,8 @@ class UserService
 
             switch ($data['role']) {
                 case 'Admin':
-                    if(isset($user->client_id) && $user->client_id) {
-                        $clientId = $user->client_id;
 
-                        $user->client_id = null;
-                        $user->update();
-                    }
-
+                    $user->update();
                     $user->assignRole(UserRoleEnum::ADMIN);
                     break;
 

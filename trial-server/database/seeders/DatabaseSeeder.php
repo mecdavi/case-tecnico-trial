@@ -28,10 +28,7 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('neneVasco123'),
         ]);
 
-        // roda só uma vez
         $this->call(UserRoleSeeder::class);
-
-        // agora sim: usando ->value
         $user1->assignRole(UserRoleEnum::ADMIN->value);
         $user2->assignRole(UserRoleEnum::USER->value);
         $user3->assignRole(UserRoleEnum::USER->value);
