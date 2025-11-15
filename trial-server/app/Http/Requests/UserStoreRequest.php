@@ -28,6 +28,7 @@ class UserStoreRequest extends FormRequest
             'name'           => 'required|string|max:255',
             'email'          => 'required|email|unique:users,email',
             'password'       => 'required|string|min:6|confirmed',
+            'password_confirmation'=> 'required|same:password|min:6',
             'role'           => ['required', Rule::enum( UserRoleEnum::class )],
             // 'corporate_name' => 'required_if:role,Cliente|string',
             /**
@@ -56,6 +57,19 @@ class UserStoreRequest extends FormRequest
             // 'state'          => 'required_with:zip_code|string',
             // 'lat'            => 'nullable|string',
             // 'long'           => 'nullable|string',
+        ];
+    }
+    public function messages()
+    {
+        return [
+            'password.required' => 'A senha é obrigatória.',
+            'password_confirmation.required' => 'A confirmação de senha precisa ser preenchida .',
+            'password.confirmed' => 'As senhas não iguais.',
+            'password_confirmation.same' => 'As senhas não iguais.',
+            'email.required' => 'O email é obrigatório.',
+            'name.required' => 'O nome de usuário é obrigatório.',
+            'role.required' => 'A Permissão é obrigatória.',
+            'password.min' => 'A senha deve conter pelo menos :min caracteres.',
         ];
     }
 }

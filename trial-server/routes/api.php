@@ -10,8 +10,13 @@ Route::prefix('v1')
     Route::middleware(['auth:sanctum'])->group(function (){
         Route::get('/me', [AuthController::class, 'me']);
     });
-    
-    Route::middleware(['auth:sanctum','role:Administrador|Eventos'])->group(function () {
-        Route::delete('/users',[\App\Http\Controllers\V1\UserController::class,'index']);
-        });
+    Route::middleware(['auth:sanctum','role:Admin|User'])->group(function () {
+            Route::get('/users',[\App\Http\Controllers\V1\UserController::class,'index']);
+            Route::get('/users/{id}',[\App\Http\Controllers\V1\UserController::class,'show']);
     });
+    Route::middleware(['auth:sanctum','role:Admin'])->group(function () {
+            Route::delete('/users/{id}',[\App\Http\Controllers\V1\UserController::class,'destroy']);
+            Route::post('/users',[\App\Http\Controllers\V1\UserController::class,'store']);
+            Route::put('/users',[\App\Http\Controllers\V1\UserController::class,'update']);
+    });
+});

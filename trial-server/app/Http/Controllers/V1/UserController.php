@@ -46,7 +46,7 @@ class UserController extends Controller
 
         $query = User::query();
 
-        $query->whereNotIn('id', [$request->user()->id]);
+        // $query->whereNotIn('id', [$request->user()->id]);
 
         if($request->filled('busca')) {
             $query->whereRaw("(
@@ -74,7 +74,10 @@ class UserController extends Controller
      */
     public function store(UserStoreRequest $request): UserResource
     {
+
         $user = $this->userService->createUser($request->validated());
+        // dd($request);
+
 
         return new UserResource($user);
     }
