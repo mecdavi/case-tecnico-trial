@@ -5,6 +5,7 @@ import {
   createWebHistory,
   createWebHashHistory,
 } from 'vue-router'
+import { useAppStore } from 'src/stores/dados'
 import routes from './routes'
 
 /*
@@ -32,6 +33,17 @@ export default defineRouter(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE),
   })
+  Router.beforeEach((to, from, next) => {
+    const userStore = useAppStore()
+
+    if (to.meta.requiresAuth && !userStore.getRole) {
+      next({ path: '/login' })
+    } else if (to.meta.permission && !userStore.permissoes.includes(to.meta.permission)) {
+      next({ path: '/403' })
+    } else {
+      next()
+    }
+})
 
   return Router
 })
