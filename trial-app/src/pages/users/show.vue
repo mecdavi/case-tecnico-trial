@@ -33,7 +33,7 @@
                     </q-input>
                 </div>
                 <div class="col-4 q-ma-md">
-                    <q-input label="Cofirme a Senha" v-show="!this.$route.params.id" v-model="data.password_confirmation" filled :type="isPwd_confirmation ? 'password' : 'text'">
+                    <q-input label="Confirme a Senha" v-show="!this.$route.params.id" v-model="data.password_confirmation" filled :type="isPwd_confirmation ? 'password' : 'text'">
                         <template v-slot:append>
                         <q-icon
                             :name="isPwd_confirmation ? 'visibility_off' : 'visibility'"
