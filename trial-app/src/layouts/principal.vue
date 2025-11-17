@@ -47,7 +47,6 @@
 </template>
 <script lang="js">
 import EssentialLink from 'components/EssentialLink.vue'
-import { useAppStore } from 'src/stores/dados'
 export default{
     name:'principal-layout',
     components:{
@@ -79,11 +78,6 @@ export default{
         }
     },
     async created(){
-      this.appStore = useAppStore()
-      console.log(this.appStore)
-      if (!this.appStore.getUsuario || Object.keys(this.appStore.getUsuario).length === 0) {
-        return this.$logout()
-      }
 
     }
 }
