@@ -5,7 +5,7 @@
         <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
         <q-toolbar-title> Trial App </q-toolbar-title>
         <!-- User Menu -->
-          <span class="q-px-md text-bold">{{appStore.usuario.email}}</span>
+          <span class="q-px-md text-bold">{{appStore.usuario?.email}}</span>
           <q-avatar size="32" color="primary">
             <q-img fit="cover" src="/src/assets/cat_2.png" ></q-img>
           </q-avatar>
